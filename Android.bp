@@ -1,3 +1,6 @@
+// Isolate vendor header names already provided by the Lineage HAL tree.
+soong_namespace {}
+
 headers_src = [
     "include/uapi/linux/smc*ke.h",
     "include/linux/smc*_object.h",
