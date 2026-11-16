@@ -1,5 +1,9 @@
 # Android makefile for securemsm kernel modules
 
+# Lineage uses TARGET_KERNEL_EXT_MODULES; the legacy Qualcomm entry point
+# requires its own DLKM infrastructure.
+ifneq ($(wildcard $(TOP)/device/qcom/common/dlkm/Build_external_kernelmodule.mk),)
+
 ENABLE_SECUREMSM_DLKM := false
 ifeq ($(TARGET_KERNEL_DLKM_DISABLE), true)
 ifeq ($(TARGET_KERNEL_DLKM_SECURE_MSM_OVERRIDE), true)
@@ -135,3 +139,5 @@ endif
 ###################################################
 ###################################################
 endif #COMPILE_SECUREMSM_DLKM check
+
+endif # Qualcomm DLKM build infrastructure
