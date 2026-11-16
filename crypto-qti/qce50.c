@@ -414,6 +414,7 @@ static int qce_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
 static int _probe_ce_engine(struct qce_device *pce_dev)
 {
 	unsigned int rev;
+	unsigned int op;
 	unsigned int maj_rev, min_rev, step_rev;
 
 	rev = readl_relaxed(pce_dev->iobase + CRYPTO_VERSION_REG);
@@ -461,12 +462,14 @@ static int _probe_ce_engine(struct qce_device *pce_dev)
 
 	pce_dev->ce_bam_info.ce_burst_size = MAX_CE_BAM_BURST_SIZE;
 
-	dev_dbg(pce_dev->pdev, "CE device = %#x IO base, CE = %pK Consumer (IN) PIPE %d,\nProducer (OUT) PIPE %d IO base BAM = %pK\nBAM IRQ %d Engines Availability = %#x\n",
+	dev_dbg(pce_dev->pdev, "CE device = %#x IO base, CE = %pK IO base BAM = %pK\nBAM IRQ %d Engines Availability = %#x\n",
 			pce_dev->ce_bam_info.ce_device, pce_dev->iobase,
-			pce_dev->ce_bam_info.dest_pipe_index,
-			pce_dev->ce_bam_info.src_pipe_index,
 			pce_dev->ce_bam_info.bam_iobase,
 			pce_dev->ce_bam_info.bam_irq, pce_dev->engines_avail);
+	for (op = 0; op < QCE_OFFLOAD_OPER_LAST; op++)
+		dev_dbg(pce_dev->pdev, "Operation %u Consumer (IN) PIPE %u Producer (OUT) PIPE %u\n",
+			op, pce_dev->ce_bam_info.dest_pipe_index[op],
+			pce_dev->ce_bam_info.src_pipe_index[op]);
 	return 0;
 };
 
